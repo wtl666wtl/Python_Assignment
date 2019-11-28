@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(python_interpreter)
+project(code)
 set(CMAKE_CXX_STANDARD 14)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}   -g")
 include_directories(
@@ -25,5 +25,5 @@ file(GLOB antlr4-cpp-src
         ${PROJECT_SOURCE_DIR}/third_party/runtime/src/tree/xpath/*.cpp
         )
 add_library (antlr4-cpp-runtime ${antlr4-cpp-src})
-add_executable(python_interpreter ${src_dir} src/main.cpp)
-target_link_libraries(python_interpreter antlr4-cpp-runtime)
+add_executable(code ${src_dir} src/main.cpp)
+target_link_libraries(code antlr4-cpp-runtime)
