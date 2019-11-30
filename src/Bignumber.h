@@ -103,6 +103,8 @@ class Bignumber {
     Bignumber operator*(const Bignumber& b) const
     {
         Bignumber c;
+        //print();b.print();
+        if(x[0]==0||b.x[0]==0)return Bignumber(0ll);
         c.neg=neg*b.neg;
         for(int i=0;i<b.w;++i){
         	int f=0;
