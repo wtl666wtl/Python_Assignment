@@ -5,13 +5,12 @@
 #include "Python3BaseVisitor.h"
 using namespace std;
 int cnt=0;//cengshu
-int numf=0,func=0;//functions
+int numf=0,func=0,notin[2006];//functions
 int id=0;//continue=1 break=2 or return=3
 map<string , Element >g[2006];
 map<string , int>nf;
 map<string , Element >ff[200006];
 vector<string>vf[200006];
-vector<Element>tESt;
 Python3Parser::SuiteContext *lis[200006];
 
 class EvalVisitor: public Python3BaseVisitor {
@@ -23,7 +22,6 @@ public:
         nf["float"]=3;
         nf["str"]=4;
         nf["bool"]=5;
-        tESt.push_back(Element("1",2));
         for(const auto &c : ctx->stmt()){
             visitStmt(c);
         }
@@ -31,8 +29,10 @@ public:
 
     virtual antlrcpp::Any visitFuncdef(Python3Parser::FuncdefContext *ctx) override {
         nf[ctx->NAME()->getText()]=++numf;
+        int numff=numf;
         visitParameters(ctx->parameters());
-        lis[numf]=ctx->suite();
+        lis[numff]=ctx->suite();
+        //printf("QWQ %d %d\n",numff,lis[numff]);
         return ctx;
     }
 
@@ -42,20 +42,22 @@ public:
     }
 
     virtual antlrcpp::Any visitTypedargslist(Python3Parser::TypedargslistContext *ctx) override {
-        int ojb=ctx->test().size();
+        int ojb=ctx->test().size(),numff=numf;
         int j=ctx->test().size()-1,i=ctx->tfpdef().size()-1;
         for(;j>=0;i--,j--){
             string ss = visitTfpdef(ctx->tfpdef()[i]);
             vector<Element>tmp = visitTest(ctx->test()[j]);
-            ff[numf][ss] = tmp[0];
-            vf[numf].push_back(ss);
+            ff[numff][ss] = tmp[0];
+            vf[numff].push_back(ss);
         }
         for(;i>=0;i--){
             string ss = visitTfpdef(ctx->tfpdef()[i]);
             Element tmp("", 0);
-            ff[numf][ss] = tmp;
-            vf[numf].push_back(ss);
+            ff[numff][ss] = tmp;
+            vf[numff].push_back(ss);
         }
+        for(int i=0;i<vf[numff].size()/2;i++)
+            swap(vf[numff][i],vf[numff][vf[numff].size()-1-i]);
         return ctx;
     }
 
@@ -74,7 +76,7 @@ public:
     virtual antlrcpp::Any visitSimple_stmt(Python3Parser::Simple_stmtContext *ctx) override {
         if(ctx->small_stmt()!=NULL){
             vector<Element>tmp=visitSmall_stmt(ctx->small_stmt());
-           // printf("…… "),tmp[0].print(),puts("");
+            //printf("…… "),tmp[0].print(),puts("");
             return tmp;
         }
     }
@@ -83,7 +85,7 @@ public:
         if(ctx->expr_stmt()!=NULL)return visitExpr_stmt(ctx->expr_stmt());
         else {
             vector<Element>tmp=visitFlow_stmt(ctx->flow_stmt());
-          //  printf("!!! "),tmp[0].print(),puts("");
+           //printf("!!! "),tmp[0].print(),puts("");
             return tmp;
         }
     }
@@ -91,31 +93,31 @@ public:
     virtual antlrcpp::Any visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) override {
         //return visitTestlist(ctx->testlist()[0]);
         string sss=ctx->getText();
-        int siz=ctx->testlist().size();
+        int siz=ctx->testlist().size(),cntt=cnt;
         vector<Element>tmp=visitTestlist(ctx->testlist()[siz-1]);
         if(ctx->augassign()!=NULL){
             string op=visitAugassign(ctx->augassign());
             for(int i=0;i<tmp.size();i++){
                 string ss=ctx->testlist()[0]->test()[i]->getText();
                 if(op=="+="){
-                    g[cnt][ss]+=tmp[i];
+                    g[cntt][ss]+=tmp[i];
                 }else if(op=="-="){
-                    g[cnt][ss]-=tmp[i];
+                    g[cntt][ss]-=tmp[i];
                 }else if(op=="*="){
-                    g[cnt][ss]*=tmp[i];
+                    g[cntt][ss]*=tmp[i];
                 }else if(op=="/="){
-                    g[cnt][ss]/=tmp[i];
+                    g[cntt][ss]/=tmp[i];
                 }else if(op=="//="){
-                    g[cnt][ss]^=tmp[i];
+                    g[cntt][ss]^=tmp[i];
                 }else if(op=="%=") {
-                    g[cnt][ss]%= tmp[i];
+                    g[cntt][ss]%= tmp[i];
                 }
             }
         }else{
-            for(int k=0;k<siz-1;k++){
+            for(int k=siz-2;k>=0;k--){
                 for(int i=0;i<tmp.size();i++){
                     string ss=ctx->testlist()[k]->test()[i]->getText();
-                    g[cnt][ss]=tmp[i];
+                    g[cntt][ss]=tmp[i];
                     //cout<<"TEST:"<<cnt<<' '<<ss<<' ';g[cnt][ss].print();puts("");
                 }
             }
@@ -151,27 +153,26 @@ public:
     }
 
     virtual antlrcpp::Any visitReturn_stmt(Python3Parser::Return_stmtContext *ctx) override {
-        id=3;
         int funct=func;
         if(ctx->testlist()!=NULL) {
             vector<Element> tmp = visit(ctx->testlist());
             //printf("### ");tmp[0].print();puts("");
+            id=3;
             return tmp;
         }
         vector<Element>t1;t1.clear();
+        id=3;
         return t1;
     }
 
     virtual antlrcpp::Any visitCompound_stmt(Python3Parser::Compound_stmtContext *ctx) override {
         if(ctx->if_stmt()!=NULL){
-            visitIf_stmt(ctx->if_stmt());
+            return visitIf_stmt(ctx->if_stmt());
         }else if(ctx->while_stmt()){
-            visitWhile_stmt(ctx->while_stmt());
+            return visitWhile_stmt(ctx->while_stmt());
         }else{
-            visitFuncdef(ctx->funcdef());
+            return visitFuncdef(ctx->funcdef());
         }
-        vector<Element>t1;t1.clear();
-        return t1;
     }
 
     virtual antlrcpp::Any visitIf_stmt(Python3Parser::If_stmtContext *ctx) override {
@@ -182,20 +183,27 @@ public:
             vector<Element>tmp1=visitTest(ctx->test()[pos]);
             tmp1[0].Boo();tmp=tmp1;
         }
-        if(tmp[0].c==1)visit(ctx->suite()[pos]);
-        else if(pos+1<ctx->suite().size())visit(ctx->suite()[pos+1]);
+        if(tmp[0].c==1){
+            vector<Element>t1=visit(ctx->suite()[pos]);
+            //printf("OOOOOrz %d\n",t1.size());
+            return t1;
+        }
+        else if(pos+1<ctx->suite().size()){
+            vector<Element>t1=visit(ctx->suite()[pos+1]);
+            return t1;
+        }
         vector<Element>t1;t1.clear();
         return t1;
     }
 
     virtual antlrcpp::Any visitWhile_stmt(Python3Parser::While_stmtContext *ctx) override {
         vector<Element>tmp=visitTest(ctx->test());
-        tmp[0].Boo();int orz=0;id=0;
+        tmp[0].Boo();int orz=0;
         while(tmp[0].c==1){
-            visit(ctx->suite());
+            vector<Element>t1=visit(ctx->suite());
             if(id==2){id=0;break;}
             else if(id==1)id=0;
-            else if(id==3)break;
+            else if(id==3)return t1;
             vector<Element>tmp1=visitTest(ctx->test());
             tmp1[0].Boo();tmp=tmp1;
         }
@@ -204,16 +212,20 @@ public:
     }
 
     virtual antlrcpp::Any visitSuite(Python3Parser::SuiteContext *ctx) override {
+        //printf("NB %d\n",ctx->simple_stmt()==NULL);
         if(ctx->simple_stmt()!=NULL){
             vector<Element>tmp1=visitSimple_stmt(ctx->simple_stmt());
-           // if(id==3)printf("@@@ %d ",tmp1.size()),tmp1[0].print(),puts("");
+            //printf("~ %d\n",id);
+            //if(id==3)printf("@@@ %d ",tmp1.size()),tmp1[0].print(),puts("");
             if(id==3)return tmp1;
-        }
-        for(int i=0;i<ctx->stmt().size();i++) {
-            vector<Element>tmp=visitStmt(ctx->stmt()[i]);
-            if(id==1||id==2)break;
-            //if(id==3)printf("@@@ "),tmp[0].print(),puts("");
-            if(id==3)return tmp;
+        }else {
+            for (int i = 0; i < ctx->stmt().size(); i++) {
+                vector<Element> tmp = visitStmt(ctx->stmt()[i]);
+                if (id == 1 || id == 2)break;
+                //printf("` %d\n",id);
+                //if (id == 3)printf("@@@ "), tmp[0].print(), puts("");
+                if (id == 3)return tmp;
+            }
         }
         vector<Element>t1;t1.clear();
         return t1;
@@ -298,10 +310,10 @@ public:
         vector<Element>key=visitTerm(ctx->term()[0]);
         //printf("now key:");key[0].print();puts("");
         string ss=ctx->getText();
-        //cout<<ss<<endl;
         ss.erase(0,ctx->term()[0]->getText().length());
         for(int i=1;i<ctx->term().size();i++){
             vector<Element>tmp=visitTerm(ctx->term()[i]);
+            //printf("now tmp:");tmp[0].print();puts("");
             if(ss[0]=='+'){
                 key[0]+=tmp[0];
             }else{
@@ -355,22 +367,26 @@ public:
                 //visitAtom(ctx->atom());
                 int funct=func=nf[ctx->atom()->NAME()->getText()];
                 if(funct<=5){
-                    Element t1=visitTrailer(ctx->trailer());
-                    vector<Element>tmp;tmp.clear();
-                    tmp.push_back(t1);func=0;
+                    Element t1 = visitTrailer(ctx->trailer());
+                    vector<Element> tmp;
+                    tmp.clear();
+                    tmp.push_back(t1);
+                    func = 0;
                     return tmp;
                 }else{
+                    int cntt=++cnt;
+                    notin[cntt]=1;
                     for(int i=0;i<vf[funct].size();i++){
                             auto p=vf[funct][i];
-                            if(ff[funct][p].fl!=0)g[cnt+1][p]=ff[funct][p];
+                            if(ff[funct][p].fl!=0)g[cntt][p]=ff[funct][p];
                         }
                     visitTrailer(ctx->trailer());
+                    notin[cntt]=0;
                     //printf("### %d\n",cnt);g[cnt][vf[funct][0]].print();
-                    cnt++;
-                    //puts("Orz");
+                    //printf("Why? %d %d\n",funct,lis[funct]);
                     vector<Element>tmp1=visitSuite(lis[funct]);
                     //cout<<ctx->getText()<<endl;
-                    //printf("%d\n",tmp1.size());
+                    //printf("Orz %d\n",tmp1.size());
                     id=0;cnt--;
                     //tmp[0].print();
                     return tmp1;
@@ -385,7 +401,12 @@ public:
     }
 
     virtual antlrcpp::Any visitTrailer(Python3Parser::TrailerContext *ctx) override {
+        int funct=func;
         if(ctx->arglist()!=NULL)return visitArglist(ctx->arglist());
+        if(funct==1){
+            puts("");
+            return Element("",0);
+        }
         return ctx;
     }
 
@@ -393,9 +414,10 @@ public:
         //cout<<"Atom:"<<ctx->getText()<<endl;
         //if(ctx->STRING().size())cout<<ctx->STRING()[0]->getText()<<endl;
         if(ctx->NAME()!=NULL){
-            for(int i=cnt;;i--)
+            int cntt=cnt,qwq=notin[cntt];
+            for(int i=cntt-qwq;;i--)
                 if(g[i].count(ctx->NAME()->getText()))
-                {return g[i][ctx->NAME()->getText()];}
+                    {return g[i][ctx->NAME()->getText()];}
         }else if(ctx->test()!=NULL){
             vector<Element>tmp=visitTest(ctx->test());
             return tmp[0];
@@ -420,20 +442,26 @@ public:
             for(int i=0;i<orz.size();i++)
                 tmp.push_back(orz[i]);
         }
+        //printf("*** %d",tmp.size());
         return tmp;
     }
 
     virtual antlrcpp::Any visitArglist(Python3Parser::ArglistContext *ctx) override {
-        int funct=func;
+        int funct=func,cntt=cnt;
         Element tmp=visitArgument(ctx->argument()[0]);
         //printf("\norz:%d %d\n",funct,ctx->argument()[0]->NAME()==NULL);
         //tmp.print();
-        if(funct>5&&ctx->argument()[0]->NAME()==NULL)
-            g[cnt+1][vf[funct][0]]=tmp;
+        if(funct>5&&ctx->argument()[0]->NAME()==NULL){
+            //printf("%d\n",cnt);
+            //cout<<vf[funct][0]<<endl;
+            //tmp.print();
+            g[cntt][vf[funct][0]]=tmp;
+        }
+
         for(int i=1;i<ctx->argument().size();i++){
             if(funct==1)putchar(' ');
             tmp=visitArgument(ctx->argument()[i]);
-            if(funct!=1&&ctx->argument()[0]->NAME()==NULL)g[cnt+1][vf[funct][i]]=tmp;
+            if(funct>5&&ctx->argument()[i]->NAME()==NULL)g[cntt][vf[funct][i]]=tmp;
         }
         if(funct==1)puts("");
         else if(funct==2)tmp.Int();
@@ -445,14 +473,15 @@ public:
 
     virtual antlrcpp::Any visitArgument(Python3Parser::ArgumentContext *ctx) override {
         Element key("",0);
-        int funct=func;
+        int funct=func,cntt=cnt;
         if(ctx->NAME()!=NULL) {
             const auto &c=ctx->NAME();
             vector<Element>tmp=visitTest(ctx->test());
-            g[cnt+1][c->getText()]=tmp[0];
-            key=g[cnt+1][c->getText()];
+            g[cntt][c->getText()]=tmp[0];
+            key=g[cntt][c->getText()];
         }else{
             vector<Element>tmp=visitTest(ctx->test());
+            //printf("QVQ %d\n",tmp.size());
             key=tmp[0];
             //printf("test:");tmp[0].print();puts("");
         }
