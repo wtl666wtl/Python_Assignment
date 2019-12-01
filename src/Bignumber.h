@@ -167,7 +167,7 @@ class Bignumber {
 		for(int i=0;i<c.w/2;i++)swap(c.x[i],c.x[c.w-i-1]);
 		//c.print();
 		if(c.neg==-1){
-		    if(c*b!=*this)c-=1ll;
+		    if(c*b!=*this)c-=Bignumber(1LL);
 		}
         return c;
     }

@@ -72,8 +72,9 @@ class Element{
 		Element a=*this,b=x;
 		if(a.fl==4){
 			b.Int();
+            int tmp=(b.a).real();
+			if(tmp==0){a.s="";return a;}
 			string ss=a.s;
-			int tmp=(b.a).real();
 			for(int i=2;i<=tmp;i++)a.s+=ss;
 			return a;
 		}
