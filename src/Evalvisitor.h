@@ -25,6 +25,7 @@ public:
         for(const auto &c : ctx->stmt()){
             visitStmt(c);
         }
+        return ctx;
     }
 
     virtual antlrcpp::Any visitFuncdef(Python3Parser::FuncdefContext *ctx) override {
