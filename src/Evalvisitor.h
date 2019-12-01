@@ -11,6 +11,7 @@ map<string , Element >g[2006];
 map<string , int>nf;
 map<string , Element >ff[2006];
 vector<string>vf[2006];
+int funst[2006],top=0;
 Python3Parser::SuiteContext *lis[2006];
 
 int find(int cnt,string s)
@@ -375,12 +376,13 @@ public:
             if(ctx->atom()->NAME()){
                 //visitAtom(ctx->atom());
                 int funct=func=nf[ctx->atom()->NAME()->getText()];
+                funst[++top]=func;
                 if(funct<=5){
                     Element t1 = visitTrailer(ctx->trailer());
                     vector<Element> tmp;
                     tmp.clear();
                     tmp.push_back(t1);
-                    func = 0;
+                    func = funst[--top];
                     return tmp;
                 }else{
                     int cntt=++cnt;
@@ -397,7 +399,7 @@ public:
                     //cout<<ctx->getText()<<endl;
                     //printf("Orz %d\n",tmp1.size());
                     g[cnt].clear();
-                    id=0;cnt--;
+                    id=0;cnt--;func=funst[--top];
                     //tmp[0].print();
                     return tmp1;
                 }
@@ -467,7 +469,6 @@ public:
             //tmp.print();
             g[cntt][vf[funct][0]]=tmp;
         }
-
         for(int i=1;i<ctx->argument().size();i++){
             if(funct==1)putchar(' ');
             tmp=visitArgument(ctx->argument()[i]);
@@ -478,6 +479,7 @@ public:
         else if(funct==3)tmp.Flo();
         else if(funct==4)tmp.Str();
         else if(funct==5)tmp.Boo();
+        //printf("NB ");tmp.print();cout<<endl;
         return tmp;
     }
 
@@ -495,6 +497,7 @@ public:
             key=tmp[0];
             //printf("test:");tmp[0].print();puts("");
         }
+        //printf("$$ %d\n",funct);
         if(funct==1)key.print();
         return key;
     }

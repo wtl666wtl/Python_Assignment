@@ -195,7 +195,7 @@ class Element{
 		ostringstream myos;
 		if(fl==2)s=a.str();
 		else if(fl==3)myos<<b,s=myos.str();
-		else if(fl==1)c==0?s="False":"True";
+		else if(fl==1)c==0?s="False":s="True";
 		fl=4;
 		return *this;
 	}
