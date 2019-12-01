@@ -56,7 +56,7 @@ class Bignumber {
 		}else if(neg==-1&&b.neg==-1){
 			return -((-*this)+(-b));
 		}else if(neg==1&&b.neg==-1){
-			if(*this>(-b)){
+			if(*this>=(-b)){
 				Bignumber c;
 				int f=0,tmp;c.w=w;
     	    	for(int i=0;i<c.w;++i){
@@ -104,7 +104,8 @@ class Bignumber {
     {
         Bignumber c;
         //print();b.print();
-        if(x[0]==0||b.x[0]==0)return Bignumber(0ll);
+        if(w==1&&x[0]==0)return *this;
+        if(b.w==1&&b.x[0]==0)return b;
         c.neg=neg*b.neg;
         for(int i=0;i<b.w;++i){
         	int f=0;
@@ -161,10 +162,10 @@ class Bignumber {
         		while(d.x[s]==0&&s>=0)s--;
 			}
 			c.w++;(c.x).push_back(tmp);
-			for(int j=max(0,s-b.w+1);j<t-1;j++)c.w++,(c.x).push_back(0);
+			for(int j=max(-1,s-b.w+1);j<t-1;j++)c.w++,(c.x).push_back(0);
 		}
 		for(int i=0;i<c.w/2;i++)swap(c.x[i],c.x[c.w-i-1]);
-		c.print();
+		//c.print();
 		if(c.neg==-1){
 		    if(c*b!=*this)c-=1ll;
 		}
