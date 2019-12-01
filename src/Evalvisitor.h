@@ -13,6 +13,12 @@ map<string , Element >ff[2006];
 vector<string>vf[2006];
 Python3Parser::SuiteContext *lis[2006];
 
+int find(int cnt,string s)
+{
+    for(int i=cnt;i>=0;i--)
+        if(g[i].count(s))return i;
+}
+
 class EvalVisitor: public Python3BaseVisitor {
 public:
     virtual antlrcpp::Any visitFile_input(Python3Parser::File_inputContext *ctx) override {
@@ -94,31 +100,33 @@ public:
     virtual antlrcpp::Any visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) override {
         //return visitTestlist(ctx->testlist()[0]);
         string sss=ctx->getText();
-        int siz=ctx->testlist().size(),cntt=cnt;
+        int siz=ctx->testlist().size(),cntt=cnt,tot;
         vector<Element>tmp=visitTestlist(ctx->testlist()[siz-1]);
         if(ctx->augassign()!=NULL){
             string op=visitAugassign(ctx->augassign());
             for(int i=0;i<tmp.size();i++){
                 string ss=ctx->testlist()[0]->test()[i]->getText();
+                tot=find(cntt,ss);
                 if(op=="+="){
-                    g[cntt][ss]+=tmp[i];
+                    g[tot][ss]+=tmp[i];
                 }else if(op=="-="){
-                    g[cntt][ss]-=tmp[i];
+                    g[tot][ss]-=tmp[i];
                 }else if(op=="*="){
-                    g[cntt][ss]*=tmp[i];
+                    g[tot][ss]*=tmp[i];
                 }else if(op=="/="){
-                    g[cntt][ss]/=tmp[i];
+                    g[tot][ss]/=tmp[i];
                 }else if(op=="//="){
-                    g[cntt][ss]^=tmp[i];
+                    g[tot][ss]^=tmp[i];
                 }else if(op=="%=") {
-                    g[cntt][ss]%= tmp[i];
+                    g[tot][ss]%= tmp[i];
                 }
             }
         }else{
             for(int k=siz-2;k>=0;k--){
                 for(int i=0;i<tmp.size();i++){
                     string ss=ctx->testlist()[k]->test()[i]->getText();
-                    g[cntt][ss]=tmp[i];
+                    tot=find(cntt,ss);
+                    g[tot][ss]=tmp[i];
                     //cout<<"TEST:"<<cnt<<' '<<ss<<' ';g[cnt][ss].print();puts("");
                 }
             }
@@ -388,6 +396,7 @@ public:
                     vector<Element>tmp1=visitSuite(lis[funct]);
                     //cout<<ctx->getText()<<endl;
                     //printf("Orz %d\n",tmp1.size());
+                    g[cnt].clear();
                     id=0;cnt--;
                     //tmp[0].print();
                     return tmp1;
@@ -490,6 +499,5 @@ public:
         return key;
     }
 };
-
 
 #endif //PYTHON_INTERPRETER_EVALVISITOR_H
