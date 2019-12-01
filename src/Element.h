@@ -225,6 +225,9 @@ class Element{
 		if(fl==3)printf("%.6lf",b);
 		if(fl==4)cout<<s;
 	}
+	~Element(){
+        s="";
+    }
 };
 
 #endif

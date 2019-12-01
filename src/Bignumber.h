@@ -263,6 +263,11 @@ class Bignumber {
         if(neg==-1)tmp="-"+tmp;
         return tmp;
     }
+
+    ~Bignumber ()
+    {
+        x.clear();
+    }
 };
 
     bool bj(int l,int r,const Bignumber& d,const Bignumber& b)
