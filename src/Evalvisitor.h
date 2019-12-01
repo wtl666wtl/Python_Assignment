@@ -15,8 +15,8 @@ Python3Parser::SuiteContext *lis[2006];
 
 int find(int cnt,string s)
 {
-    for(int i=cnt;i>=0;i--)
-        if(g[i].count(s))return i;
+    if(g[cnt].count(s))return cnt;
+    return 0;
 }
 
 class EvalVisitor: public Python3BaseVisitor {
@@ -425,9 +425,9 @@ public:
         //if(ctx->STRING().size())cout<<ctx->STRING()[0]->getText()<<endl;
         if(ctx->NAME()!=NULL){
             int cntt=cnt,qwq=notin[cntt];
-            for(int i=cntt-qwq;;i--)
-                if(g[i].count(ctx->NAME()->getText()))
-                    {return g[i][ctx->NAME()->getText()];}
+            if(g[cntt-qwq].count(ctx->NAME()->getText()))
+                return g[cntt-qwq][ctx->NAME()->getText()];
+            else return g[0][ctx->NAME()->getText()];
         }else if(ctx->test()!=NULL){
             vector<Element>tmp=visitTest(ctx->test());
             return tmp[0];
