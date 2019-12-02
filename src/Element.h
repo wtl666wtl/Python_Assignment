@@ -208,6 +208,7 @@ class Element{
 	Element Int(){
 		if(fl==1)a=1LL*c;
 		else if(fl==3)a=1LL*b;
+		else if(fl==4)a=Bignumber(s);
 		fl=2;
 		return *this;
 	}
