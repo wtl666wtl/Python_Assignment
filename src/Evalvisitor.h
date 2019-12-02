@@ -261,7 +261,7 @@ public:
         for(int i=1;i<ctx->and_test().size();i++){
             if(key[0].c==1)return key;
             vector<Element>tmp=visitAnd_test(ctx->and_test()[i]);
-            //tmp[0].Boo();
+            tmp[0].Boo();
             if(tmp[0].c==1)key[0].c=1;
         }
         return key;
@@ -276,7 +276,7 @@ public:
         for(int i=1;i<ctx->not_test().size();i++){
             if(key[0].c==0)return key;
             vector<Element>tmp=visitNot_test(ctx->not_test()[i]);
-            //tmp[0].Boo();
+            tmp[0].Boo();
             if(tmp[0].c==0)key[0].c=0;
         }
         return key;
