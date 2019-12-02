@@ -501,14 +501,18 @@ public:
             vector<Element>tmp=visitTest(ctx->test());
             g[cntt][c->getText()]=tmp[0];
             key=g[cntt][c->getText()];
+            if(funct==1)key.print();
         }else{
             vector<Element>tmp=visitTest(ctx->test());
             //printf("QVQ %d\n",tmp.size());
+            for(int i=0;i<tmp.size();i++){
+                if(i!=0)putchar(' ');
+                if(funct==1)tmp[i].print();
+            }
             key=tmp[0];
             //printf("test:");tmp[0].print();puts("");
         }
         //printf("$$ %d\n",funct);
-        if(funct==1)key.print();
         return key;
     }
 };
