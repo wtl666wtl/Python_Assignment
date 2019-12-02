@@ -140,6 +140,11 @@ class Bignumber {
         Bignumber c;
 		Bignumber d=(*this);
         c.neg=neg*b.neg;
+        if(d.w==1&&d.x[0]==0){
+            c.w=1;c.neg=1;
+            (c.x).push_back(0);
+            return c;
+        }
         if(abs(d)<abs(b)){
         	c.w=1;
         	if(c.neg==1)(c.x).push_back(0);
@@ -157,7 +162,7 @@ class Bignumber {
         	while(bj(s,t,d,b)){
         		for(int i=t,j=0;i<=s;j++,i++){
 					if(j<b.w)d.x[i]-=b.x[j];
-					if(d.x[i]<0)d.x[i]+=10,d.x[i+1]--;
+					if(d.x[i]<0&&i<s)d.x[i]+=10,d.x[i+1]--;
 				}
 				tmp++;
         		while(d.x[s]==0&&s>=0)s--;
