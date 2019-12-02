@@ -159,6 +159,7 @@ class Element{
 			if(a.c==b.c)return 1;
 			else return 0;
 		}
+		if(b.fl==0)return 1;
 	}
 	bool operator<=(const Element x)const{
 		return *this<x||*this==x;
