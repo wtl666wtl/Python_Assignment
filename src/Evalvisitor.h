@@ -16,7 +16,8 @@ Python3Parser::SuiteContext *lis[2006];
 
 int find(int cnt,string s)
 {
-    return cnt;
+    if(g[cnt].count(s))return cnt;
+    else return 0;
 }
 
 class EvalVisitor: public Python3BaseVisitor {
@@ -193,12 +194,16 @@ public:
             tmp1[0].Boo();tmp=tmp1;
         }
         if(tmp[0].c==1){
+            cnt++;
             vector<Element>t1=visitSuite(ctx->suite()[pos]);
+            g[cnt].clear();cnt--;
             //printf("OOOOOrz %d\n",t1.size());
             return t1;
         }
         else if(pos+1<ctx->suite().size()){
+            cnt++;
             vector<Element>t1=visitSuite(ctx->suite()[pos+1]);
+            g[cnt].clear();cnt--;
             return t1;
         }
         vector<Element>t1;t1.clear();
@@ -209,7 +214,9 @@ public:
         vector<Element>tmp=visitTest(ctx->test());
         tmp[0].Boo();int orz=0;
         while(tmp[0].c==1){
+            cnt++;
             vector<Element>t1=visitSuite(ctx->suite());
+            g[cnt].clear();cnt--;
             if(id==2){id=0;break;}
             else if(id==1)id=0;
             else if(id==3)return t1;
