@@ -196,7 +196,8 @@ class Element{
 		  return !(*this==x||*this<x);
 	}
 	Element Str(){
-        if(fl==2)s=a.str();
+        if(fl==0)s="None";
+        else if(fl==2)s=a.str();
         else if(fl==3){
             ostringstream myos;
             myos<<b,s=myos.str();
