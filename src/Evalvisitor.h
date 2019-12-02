@@ -9,10 +9,10 @@ int numf=0,func=0,notin[2006];//functions
 int id=0;//continue=1 break=2 or return=3
 map<string , Element >g[2006];
 map<string , int>nf;
-map<string , Element >ff[2006];
-vector<string>vf[2006];
+map<string , Element >ff[200006];
+vector<string>vf[200006];
 int funst[2006],top=0;
-Python3Parser::SuiteContext *lis[2006];
+Python3Parser::SuiteContext *lis[200006];
 
 int find(int cnt,string s)
 {
