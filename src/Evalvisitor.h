@@ -165,7 +165,7 @@ public:
     virtual antlrcpp::Any visitReturn_stmt(Python3Parser::Return_stmtContext *ctx) override {
         int funct=func;
         if(ctx->testlist()!=NULL) {
-            vector<Element> tmp = visit(ctx->testlist());
+            vector<Element> tmp = visitTestlist(ctx->testlist());
             //printf("### ");tmp[0].print();puts("");
             id=3;
             return tmp;
@@ -194,12 +194,12 @@ public:
             tmp1[0].Boo();tmp=tmp1;
         }
         if(tmp[0].c==1){
-            vector<Element>t1=visit(ctx->suite()[pos]);
+            vector<Element>t1=visitSuite(ctx->suite()[pos]);
             //printf("OOOOOrz %d\n",t1.size());
             return t1;
         }
         else if(pos+1<ctx->suite().size()){
-            vector<Element>t1=visit(ctx->suite()[pos+1]);
+            vector<Element>t1=visitSuite(ctx->suite()[pos+1]);
             return t1;
         }
         vector<Element>t1;t1.clear();
@@ -210,7 +210,7 @@ public:
         vector<Element>tmp=visitTest(ctx->test());
         tmp[0].Boo();int orz=0;
         while(tmp[0].c==1){
-            vector<Element>t1=visit(ctx->suite());
+            vector<Element>t1=visitSuite(ctx->suite());
             if(id==2){id=0;break;}
             else if(id==1)id=0;
             else if(id==3)return t1;

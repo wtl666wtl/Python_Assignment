@@ -70,6 +70,7 @@ class Element{
 	}
 	Element operator*(const Element x)const{
 		Element a=*this,b=x;
+		if(b.fl==4)swap(a,b);
 		if(a.fl==4){
 			b.Int();
             int tmp=(b.a).real();
