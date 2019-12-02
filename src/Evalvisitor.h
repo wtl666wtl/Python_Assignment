@@ -300,6 +300,7 @@ public:
             key[0].c=1;
         }
         for(int i=0;i<ctx->comp_op().size();i++){
+            if(key[0].c==0)break;
             string ss=visitComp_op(ctx->comp_op()[i]);
             vector<Element>tmp2=visitArith_expr(ctx->arith_expr()[1+i]);
             if(ss=="<"){

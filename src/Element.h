@@ -215,6 +215,7 @@ class Element{
 	Element Flo(){
 		if(fl==1)b=1.0*c;
 		else if(fl==2)b=1.0*a.real();
+		else if(fl==4)b=atof(s.c_str());
 		fl=3;
 		return *this;
 	}
