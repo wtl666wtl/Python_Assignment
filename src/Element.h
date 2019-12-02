@@ -217,8 +217,8 @@ class Element{
 		return *this;
 	}
 	Element Boo(){
-		if(fl==2)c=a.real();
-		else if(fl==3)c=(int)b;
+		if(fl==2)c=a.real()!=0;
+		else if(fl==3)c=b!=0;
 		else if(fl==4)c=s!="";
 		fl=1;
 		return *this;
