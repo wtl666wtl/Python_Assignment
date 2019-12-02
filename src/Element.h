@@ -106,6 +106,7 @@ class Element{
 	}
 	Element operator%(const Element x)const{
 		Element a=*this,b=x;
+		if(b.fl>3)return Element("",0);
 		a.Int();b.Int();
 		a.a%=b.a;
 		return a;
@@ -193,12 +194,9 @@ class Element{
 		  return !(*this==x||*this<x);
 	}
 	Element Str(){
-		if(fl==2)s=a.str();
-		else if(fl==3){
-            char orz[20];
-		    sprintf(orz,"%lf",b);
-		    s=orz;
-		}
+        ostringstream myos;
+        if(fl==2)s=a.str();
+        else if(fl==3)myos<<b,s=myos.str();
 		else if(fl==1)c==0?s="False":s="True";
 		fl=4;
 		return *this;

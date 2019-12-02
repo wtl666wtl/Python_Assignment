@@ -137,10 +137,10 @@ class Bignumber {
     // ^ -> //
     Bignumber operator^(const Bignumber& b) const
     {
-        Bignumber c;
+        Bignumber c=Bignumber();
 		Bignumber d=(*this);
         c.neg=neg*b.neg;
-        if(d.w==1&&d.x[0]==0){
+        if(b.w==0||(d.w==1&&d.x[0]==0)){
             c.w=1;c.neg=1;
             (c.x).push_back(0);
             return c;
@@ -153,7 +153,7 @@ class Bignumber {
 		}
         c.neg=neg*b.neg;
         for(int s=w-1,t=w-b.w;t>=0;t=(s-b.w+1==t?s-b.w:s-b.w+1)){
-        	while(!bj(s,t,d,b)&&t>=0){
+        	while(t>=0&&!bj(s,t,d,b)){
         		t--;
         		if(s!=w-1)c.w++,(c.x).push_back(0);
 			}
@@ -165,7 +165,7 @@ class Bignumber {
 					if(d.x[i]<0&&i<s)d.x[i]+=10,d.x[i+1]--;
 				}
 				tmp++;
-        		while(d.x[s]==0&&s>=0)s--;
+        		while(s>=0&&d.x[s]==0)s--;
 			}
 			c.w++;(c.x).push_back(tmp);
 			for(int j=max(-1,s-b.w+1);j<t-1;j++)c.w++,(c.x).push_back(0);
