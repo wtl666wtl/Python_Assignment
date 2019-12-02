@@ -249,9 +249,6 @@ public:
     virtual antlrcpp::Any visitOr_test(Python3Parser::Or_testContext *ctx) override {
         vector<Element>key=visitAnd_test(ctx->and_test()[0]);
         if(ctx->and_test().size()==1)return key;
-        else{
-            key[0].Boo();
-        }
         for(int i=1;i<ctx->and_test().size();i++){
             vector<Element>tmp=visitAnd_test(ctx->and_test()[i]);
             if(tmp[0].c==1)key[0].c=1;
@@ -262,9 +259,6 @@ public:
     virtual antlrcpp::Any visitAnd_test(Python3Parser::And_testContext *ctx) override {
         vector<Element>key=visitNot_test(ctx->not_test()[0]);
         if(ctx->not_test().size()==1)return key;
-        else{
-            key[0].Boo();
-        }
         for(int i=1;i<ctx->not_test().size();i++){
             vector<Element>tmp=visitNot_test(ctx->not_test()[i]);
             if(tmp[0].c==0)key[0].c=0;
@@ -275,7 +269,6 @@ public:
     virtual antlrcpp::Any visitNot_test(Python3Parser::Not_testContext *ctx) override {
         if(ctx->not_test()!=NULL){
             vector<Element>key=visitNot_test(ctx->not_test());
-            key[0].Boo();
             if(key[0].c==0)key[0].c=1;else key[0].c=0;
             return key;
         }else{
