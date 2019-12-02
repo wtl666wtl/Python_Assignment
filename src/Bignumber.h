@@ -30,7 +30,7 @@ class Bignumber {
     Bignumber operator=(ll a)
     {
     	x.clear();
-    	if(a==0){neg=1;w=1;x.push_back(0);}
+    	if(a==0ll){neg=1;w=1;x.push_back(0);return *this;}
     	if(a<0)neg=-1,a=-a;else neg=1;
 		w=0;
         for (;a;a/=10,w++)x.push_back(a%10);
