@@ -159,6 +159,7 @@ class Element{
 			if(a.c==b.c)return 1;
 			else return 0;
 		}
+		if(b.fl==0)return 1;
 	}
 	bool operator<=(const Element x)const{
 		return *this<x||*this==x;
@@ -207,6 +208,7 @@ class Element{
 	Element Int(){
 		if(fl==1)a=1LL*c;
 		else if(fl==3)a=1LL*b;
+		else if(fl==4)a=Bignumber(s);
 		fl=2;
 		return *this;
 	}
@@ -217,8 +219,8 @@ class Element{
 		return *this;
 	}
 	Element Boo(){
-		if(fl==2)c=a.real();
-		else if(fl==3)c=(int)b;
+		if(fl==2)c=a.real()!=0;
+		else if(fl==3)c=b!=0;
 		else if(fl==4)c=s!="";
 		fl=1;
 		return *this;

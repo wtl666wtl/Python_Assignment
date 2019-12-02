@@ -17,7 +17,7 @@ Python3Parser::SuiteContext *lis[2006];
 int find(int cnt,string s)
 {
     if(g[cnt].count(s))return cnt;
-    return 0;
+    else return 0;
 }
 
 class EvalVisitor: public Python3BaseVisitor {
@@ -194,12 +194,16 @@ public:
             tmp1[0].Boo();tmp=tmp1;
         }
         if(tmp[0].c==1){
+            //cnt++;
             vector<Element>t1=visitSuite(ctx->suite()[pos]);
+            //g[cnt].clear();cnt--;
             //printf("OOOOOrz %d\n",t1.size());
             return t1;
         }
         else if(pos+1<ctx->suite().size()){
+            //cnt++;
             vector<Element>t1=visitSuite(ctx->suite()[pos+1]);
+            //g[cnt].clear();cnt--;
             return t1;
         }
         vector<Element>t1;t1.clear();
@@ -210,7 +214,9 @@ public:
         vector<Element>tmp=visitTest(ctx->test());
         tmp[0].Boo();int orz=0;
         while(tmp[0].c==1){
+            //cnt++;
             vector<Element>t1=visitSuite(ctx->suite());
+            //g[cnt].clear();cnt--;
             if(id==2){id=0;break;}
             else if(id==1)id=0;
             else if(id==3)return t1;
@@ -243,7 +249,7 @@ public:
     }
 
     virtual antlrcpp::Any visitTest(Python3Parser::TestContext *ctx) override {
-        return visitOr_test(ctx->or_test());
+        if(ctx->or_test())return visitOr_test(ctx->or_test());
     }
 
     virtual antlrcpp::Any visitOr_test(Python3Parser::Or_testContext *ctx) override {
@@ -253,8 +259,10 @@ public:
             key[0].Boo();
         }
         for(int i=1;i<ctx->and_test().size();i++){
+            if(key[0].c==1)return key;
             vector<Element>tmp=visitAnd_test(ctx->and_test()[i]);
-            tmp[0].Boo();if(tmp[0].c==1)key[0].c=1;
+            tmp[0].Boo();
+            if(tmp[0].c==1)key[0].c=1;
         }
         return key;
     }
@@ -266,8 +274,10 @@ public:
             key[0].Boo();
         }
         for(int i=1;i<ctx->not_test().size();i++){
+            if(key[0].c==0)return key;
             vector<Element>tmp=visitNot_test(ctx->not_test()[i]);
-            tmp[0].Boo();if(tmp[0].c==0)key[0].c=0;
+            tmp[0].Boo();
+            if(tmp[0].c==0)key[0].c=0;
         }
         return key;
     }
@@ -491,14 +501,18 @@ public:
             vector<Element>tmp=visitTest(ctx->test());
             g[cntt][c->getText()]=tmp[0];
             key=g[cntt][c->getText()];
+            if(funct==1)key.print();
         }else{
             vector<Element>tmp=visitTest(ctx->test());
             //printf("QVQ %d\n",tmp.size());
+            for(int i=0;i<tmp.size();i++){
+                if(i!=0)putchar(' ');
+                if(funct==1)tmp[i].print();
+            }
             key=tmp[0];
             //printf("test:");tmp[0].print();puts("");
         }
         //printf("$$ %d\n",funct);
-        if(funct==1)key.print();
         return key;
     }
 };
