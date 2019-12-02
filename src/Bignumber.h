@@ -148,10 +148,11 @@ class Bignumber {
 		}
         c.neg=neg*b.neg;
         for(int s=w-1,t=w-b.w;t>=0;t=(s-b.w+1==t?s-b.w:s-b.w+1)){
-        	while(!bj(s,t,d,b)){
+        	while(!bj(s,t,d,b)&&t>=0){
         		t--;
         		if(s!=w-1)c.w++,(c.x).push_back(0);
 			}
+        	if(t<0)break;
         	int tmp=0;
         	while(bj(s,t,d,b)){
         		for(int i=t,j=0;i<=s;j++,i++){
