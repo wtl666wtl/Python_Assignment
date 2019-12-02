@@ -194,16 +194,16 @@ public:
             tmp1[0].Boo();tmp=tmp1;
         }
         if(tmp[0].c==1){
-            cnt++;
+            //cnt++;
             vector<Element>t1=visitSuite(ctx->suite()[pos]);
-            g[cnt].clear();cnt--;
+            //g[cnt].clear();cnt--;
             //printf("OOOOOrz %d\n",t1.size());
             return t1;
         }
         else if(pos+1<ctx->suite().size()){
-            cnt++;
+            //cnt++;
             vector<Element>t1=visitSuite(ctx->suite()[pos+1]);
-            g[cnt].clear();cnt--;
+            //g[cnt].clear();cnt--;
             return t1;
         }
         vector<Element>t1;t1.clear();
@@ -214,9 +214,9 @@ public:
         vector<Element>tmp=visitTest(ctx->test());
         tmp[0].Boo();int orz=0;
         while(tmp[0].c==1){
-            cnt++;
+            //cnt++;
             vector<Element>t1=visitSuite(ctx->suite());
-            g[cnt].clear();cnt--;
+            //g[cnt].clear();cnt--;
             if(id==2){id=0;break;}
             else if(id==1)id=0;
             else if(id==3)return t1;
@@ -261,7 +261,7 @@ public:
         for(int i=1;i<ctx->and_test().size();i++){
             if(key[0].c==1)return key;
             vector<Element>tmp=visitAnd_test(ctx->and_test()[i]);
-            tmp[0].Boo();
+            //tmp[0].Boo();
             if(tmp[0].c==1)key[0].c=1;
         }
         return key;
@@ -276,7 +276,7 @@ public:
         for(int i=1;i<ctx->not_test().size();i++){
             if(key[0].c==0)return key;
             vector<Element>tmp=visitNot_test(ctx->not_test()[i]);
-            tmp[0].Boo();
+            //tmp[0].Boo();
             if(tmp[0].c==0)key[0].c=0;
         }
         return key;
