@@ -16,8 +16,7 @@ Python3Parser::SuiteContext *lis[2006];
 
 int find(int cnt,string s)
 {
-    if(g[cnt].count(s))return cnt;
-    return 0;
+    return cnt;
 }
 
 class EvalVisitor: public Python3BaseVisitor {
@@ -244,11 +243,6 @@ public:
 
     virtual antlrcpp::Any visitTest(Python3Parser::TestContext *ctx) override {
         if(ctx->or_test())return visitOr_test(ctx->or_test());
-        else{
-            vector<Element>t1;t1.clear();
-            t1.push_back(Element("",0));
-            return t1;
-        }
     }
 
     virtual antlrcpp::Any visitOr_test(Python3Parser::Or_testContext *ctx) override {
