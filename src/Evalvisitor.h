@@ -243,7 +243,12 @@ public:
     }
 
     virtual antlrcpp::Any visitTest(Python3Parser::TestContext *ctx) override {
-        return visitOr_test(ctx->or_test());
+        if(ctx->or_test())return visitOr_test(ctx->or_test());
+        else{
+            vector<Element>t1;t1.clear();
+            t1.push_back(Element("",0));
+            return t1;
+        }
     }
 
     virtual antlrcpp::Any visitOr_test(Python3Parser::Or_testContext *ctx) override {
