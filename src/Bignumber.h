@@ -6,7 +6,7 @@ using namespace std;
 typedef long long ll;
 
 class Bignumber;
-bool bj(int l,int r,const Bignumber& d,const Bignumber& b);
+bool bj(const int &l,const int &r,const Bignumber& d,const Bignumber& b);
 
 class Bignumber {
 	public:
@@ -17,12 +17,12 @@ class Bignumber {
         w=0;neg=1;x.clear();
     }
 	
-    Bignumber(ll a)
+    Bignumber(const ll &a)
     {
         *this=a;
     }
     
-    Bignumber(string s)
+    Bignumber(const string &s)
     {
         *this=s;
     }
@@ -37,7 +37,7 @@ class Bignumber {
         return *this;
     }
 
-    Bignumber operator=(string s)
+    Bignumber operator=(const string &s)
     {
     	x.clear();
         w=0;neg=(s[0]=='-'?-1:1);
@@ -269,14 +269,9 @@ class Bignumber {
         if(neg==-1)tmp="-"+tmp;
         return tmp;
     }
-
-    ~Bignumber ()
-    {
-        x.clear();
-    }
 };
 
-    bool bj(int l,int r,const Bignumber& d,const Bignumber& b)
+    bool bj(const int &l,const int &r,const Bignumber& d,const Bignumber& b)
     {
 		if(l-r+1<b.w)return 0;
 		if(l-r+1>b.w)return 1;
