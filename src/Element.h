@@ -15,22 +15,22 @@ class Element{
 		s="";
 		fl=f;
 		if(fl==0)s="None";
-		else if(fl==1)c=gs[0]=='T'?1:0;
-		else if(fl==2)a=gs;
-		else if(fl==3)b=atof(gs.c_str());
-		else if(fl==4)gs.erase(0,1),gs.erase(gs.length()-1,1),s=gs;
+		if(fl==1)c=gs[0]=='T'?1:0;
+		if(fl==2)a=gs;
+		if(fl==3)b=atof(gs.c_str());
+		if(fl==4)gs.erase(0,1),gs.erase(gs.length()-1,1),s=gs;
 	}
 	Element operator+(const Element &x)const{
 		Element a=*this,b=x;
 		if(a.fl>b.fl)swap(a,b);
-		else if(b.fl==4){
+		if(b.fl==4){
 			a.s+=b.s;
 		}
-		else if(b.fl==3){
+		if(b.fl==3){
 			a.Flo();
 			a.b+=b.b;
 		}
-		else{
+		if(b.fl<=2){
 			a.Int();b.Int();
 			a.a+=b.a;
 		}
@@ -41,14 +41,15 @@ class Element{
         if(a.fl==3){
             a.b=-a.b;
         }
-        else{
-            a.Int();
+        if(a.fl<=2){
+a.Int();
             a.a=-a.a;
         }
         return a;
     }
 	Element operator-(const Element &x)const{
 		Element a=*this,b=x;
+
 		return a+(-b);
 	}
 	Element operator*(const Element &x)const{
@@ -66,7 +67,8 @@ class Element{
 		if(b.fl==3){
 			a.Flo();
 			a.b*=b.b;
-		}else{
+		}
+		if(b.fl<=2){
 			a.Int();b.Int();
 			a.a*=b.a;
 		}
@@ -156,17 +158,17 @@ class Element{
 			if(a.s<b.s)return 1;
 			else return 0;
 		}
-		else if(b.fl==3){
+		if(b.fl==3){
 			a.Flo();
 			if(a.b<b.b)return 1;
 			else return 0;
 		}
-		else if(b.fl==2){
+		if(b.fl==2){
 			a.Int();
 			if(a.a<b.a)return 1;
 			else return 0;
 		}
-		else if(b.fl==1){
+		if(b.fl==1){
 			if(a.c<b.c)return 1;
 			else return 0;
 		}
@@ -208,11 +210,14 @@ class Element{
 	}
 	void print(){
 		if(fl==0)printf("None");
-		else if(fl==1)c==1?printf("True"):printf("False");
-		else if(fl==2)a.print();
-		else if(fl==3)printf("%.6lf",b);
-		else cout<<s;
+		if(fl==1)c==1?printf("True"):printf("False");
+		if(fl==2)a.print();
+		if(fl==3)printf("%.6lf",b);
+		if(fl==4)cout<<s;
 	}
+	~Element(){
+        s="";
+    }
 };
 
 #endif

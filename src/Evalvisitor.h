@@ -11,11 +11,10 @@ map<string , Element >g[2006];
 map<string , int>nf;
 map<string , Element >ff[2006];
 vector<string>vf[2006];
-vector<Element>test;
 int funst[2006],top=0;
 Python3Parser::SuiteContext *lis[2006];
 
-inline int find(const int &cnt,const string &s)
+int find(int cnt,string s)
 {
     if(g[cnt].count(s))return cnt;
     else return 0;
@@ -41,6 +40,7 @@ public:
         int numff=numf;
         visitParameters(ctx->parameters());
         lis[numff]=ctx->suite();
+        //printf("QWQ %d %d\n",numff,lis[numff]);
         return ctx;
     }
 
@@ -75,16 +75,27 @@ public:
 
     virtual antlrcpp::Any visitStmt(Python3Parser::StmtContext *ctx) override {
         if(ctx->compound_stmt()!=NULL)return visitCompound_stmt(ctx->compound_stmt());
-        else return visitSimple_stmt(ctx->simple_stmt());
+        else {
+            vector<Element>tmp=visitSimple_stmt(ctx->simple_stmt());
+            return tmp;
+        }
     }
 
     virtual antlrcpp::Any visitSimple_stmt(Python3Parser::Simple_stmtContext *ctx) override {
-        return visitSmall_stmt(ctx->small_stmt());
+        if(ctx->small_stmt()!=NULL){
+            vector<Element>tmp=visitSmall_stmt(ctx->small_stmt());
+            //printf("…… "),tmp[0].print(),puts("");
+            return tmp;
+        }
     }
 
     virtual antlrcpp::Any visitSmall_stmt(Python3Parser::Small_stmtContext *ctx) override {
         if(ctx->expr_stmt()!=NULL)return visitExpr_stmt(ctx->expr_stmt());
-        else return visitFlow_stmt(ctx->flow_stmt());
+        else {
+            vector<Element>tmp=visitFlow_stmt(ctx->flow_stmt());
+           //printf("!!! "),tmp[0].print(),puts("");
+            return tmp;
+        }
     }
 
     virtual antlrcpp::Any visitExpr_stmt(Python3Parser::Expr_stmtContext *ctx) override {
@@ -121,7 +132,8 @@ public:
                 }
             }
         }
-        return test;
+        vector<Element>t1;t1.clear();
+        return t1;
     }
 
     virtual antlrcpp::Any visitAugassign(Python3Parser::AugassignContext *ctx) override {
@@ -140,25 +152,27 @@ public:
 
     virtual antlrcpp::Any visitBreak_stmt(Python3Parser::Break_stmtContext *ctx) override {
         id=2;
-        //vector<Element>t1;t1.clear();
-        return test;
+        vector<Element>t1;t1.clear();
+        return t1;
     }
 
     virtual antlrcpp::Any visitContinue_stmt(Python3Parser::Continue_stmtContext *ctx) override {
         id=1;
-        //vector<Element>t1;t1.clear();
-        return test;
+        vector<Element>t1;t1.clear();
+        return t1;
     }
 
     virtual antlrcpp::Any visitReturn_stmt(Python3Parser::Return_stmtContext *ctx) override {
         int funct=func;
         if(ctx->testlist()!=NULL) {
             vector<Element> tmp = visitTestlist(ctx->testlist());
+            //printf("### ");tmp[0].print();puts("");
             id=3;
             return tmp;
         }
+        vector<Element>t1;t1.clear();
         id=3;
-        return test;
+        return t1;
     }
 
     virtual antlrcpp::Any visitCompound_stmt(Python3Parser::Compound_stmtContext *ctx) override {
@@ -192,7 +206,8 @@ public:
             //g[cnt].clear();cnt--;
             return t1;
         }
-        return test;
+        vector<Element>t1;t1.clear();
+        return t1;
     }
 
     virtual antlrcpp::Any visitWhile_stmt(Python3Parser::While_stmtContext *ctx) override {
@@ -208,7 +223,8 @@ public:
             vector<Element>tmp1=visitTest(ctx->test());
             tmp1[0].Boo();tmp=tmp1;
         }
-        return test;
+        vector<Element>t1;t1.clear();
+        return t1;
     }
 
     virtual antlrcpp::Any visitSuite(Python3Parser::SuiteContext *ctx) override {
@@ -227,7 +243,8 @@ public:
                 if (id == 3)return tmp;
             }
         }
-        return test;
+        vector<Element>t1;t1.clear();
+        return t1;
         //return visitStmt(ctx->stmt()[ctx->stmt().size()-1]);
     }
 
