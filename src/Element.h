@@ -30,13 +30,9 @@ class Element{
 			a.Flo();
 			a.b+=b.b;
 		}
-		if(b.fl==2){
-			a.Int();
+		if(b.fl<=2){
+			a.Int();b.Int();
 			a.a+=b.a;
-		}
-		if(b.fl==1){
-a.Int();
-			a.c+=b.c;
 		}
 		return a;
 	}
@@ -45,11 +41,9 @@ a.Int();
         if(a.fl==3){
             a.b=-a.b;
         }
-        if(a.fl==2){
+        if(a.fl<=2){
+a.Int();
             a.a=-a.a;
-        }
-        if(a.fl==1){
-            a.c=-a.c;
         }
         return a;
     }
@@ -60,13 +54,9 @@ a.Int();
 			a.Flo();
 			a.b-=b.b;
 		}
-		if(b.fl==2){
-			a.Int();
+		if(b.fl<=2){
+			a.Int();b.Int();
 			a.a-=b.a;
-		}
-		if(b.fl==1){
-a.Int();
-			a.c-=b.c;
 		}
 		return a;
 	}
@@ -86,13 +76,9 @@ a.Int();
 			a.Flo();
 			a.b*=b.b;
 		}
-		if(b.fl==2){
-			a.Int();
+		if(b.fl<=2){
+			a.Int();b.Int();
 			a.a*=b.a;
-		}
-		if(b.fl==1){
-a.Int();
-			a.c*=b.c;
 		}
 		return a;
 	}
