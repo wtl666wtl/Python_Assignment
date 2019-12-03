@@ -49,16 +49,8 @@ a.Int();
     }
 	Element operator-(const Element x)const{
 		Element a=*this,b=x;
-		if(a.fl>b.fl)swap(a,b);
-		if(b.fl==3){
-			a.Flo();
-			a.b-=b.b;
-		}
-		if(b.fl<=2){
-			a.Int();b.Int();
-			a.a-=b.a;
-		}
-		return a;
+		
+		return a+(-b);
 	}
 	Element operator*(const Element x)const{
 		Element a=*this,b=x;
