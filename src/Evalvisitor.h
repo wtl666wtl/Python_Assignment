@@ -16,7 +16,7 @@ Python3Parser::SuiteContext *lis[2006];
 
 int find(int cnt,string s)
 {
-    if(g[cnt-notin[cnt]].count(s))return cnt;
+    if(g[cnt].count(s))return cnt;
     else return 0;
 }
 
@@ -397,7 +397,7 @@ public:
                     return tmp;
                 }else{
                     int cntt=++cnt;
-                    notin[cntt]=notin[cntt-1];
+                    notin[cntt]=notin[cntt-1]+1;
                     for(int i=0;i<vf[funct].size();i++){
                             auto p=vf[funct][i];
                             if(ff[funct][p].fl!=0)g[cntt][p]=ff[funct][p];
