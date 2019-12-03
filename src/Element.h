@@ -35,6 +35,7 @@ class Element{
 			a.a+=b.a;
 		}
 		if(b.fl==1){
+a.Int();
 			a.c+=b.c;
 		}
 		return a;
@@ -64,6 +65,7 @@ class Element{
 			a.a-=b.a;
 		}
 		if(b.fl==1){
+a.Int();
 			a.c-=b.c;
 		}
 		return a;
@@ -89,6 +91,7 @@ class Element{
 			a.a*=b.a;
 		}
 		if(b.fl==1){
+a.Int();
 			a.c*=b.c;
 		}
 		return a;
