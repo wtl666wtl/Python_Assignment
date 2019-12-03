@@ -11,7 +11,7 @@ class Element{
     Element(){
         s="";fl=0;
     }
-	Element(string gs,int f=0){
+	Element(const string &gs,const int &f){
 		s="";
 		fl=f;
 		if(fl==0)s="None";
