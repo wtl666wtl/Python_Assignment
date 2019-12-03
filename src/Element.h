@@ -11,7 +11,7 @@ class Element{
     Element(){
         s="";fl=0;
     }
-	Element(const string &gs,const int &f){
+	Element(string gs,const int &f){
 		s="";
 		fl=f;
 		if(fl==0)s="None";
@@ -47,12 +47,12 @@ a.Int();
         }
         return a;
     }
-	Element operator-(const Element x)const{
+	Element operator-(const Element &x)const{
 		Element a=*this,b=x;
 		
 		return a+(-b);
 	}
-	Element operator*(const Element x)const{
+	Element operator*(const Element &x)const{
 		Element a=*this,b=x;
 		if(b.fl==4)swap(a,b);
 		if(a.fl==4){
@@ -74,44 +74,44 @@ a.Int();
 		}
 		return a;
 	}
-	Element operator^(const Element x)const{
+	Element operator^(const Element &x)const{
 		Element a=*this,b=x;
 		a.Int();b.Int();
 		a.a^=b.a;
 		return a;
 	}
-	Element operator/(const Element x)const{
+	Element operator/(const Element &x)const{
 		Element a=*this,b=x;
 		a.Flo();b.Flo();
 		a.b/=b.b;
 		return a;
 	}
-	Element operator%(const Element x)const{
+	Element operator%(const Element &x)const{
 		Element a=*this,b=x;
 		if(b.fl>3)return Element("",0);
 		a.Int();b.Int();
 		a.a%=b.a;
 		return a;
 	}
-	Element operator+=(const Element x){
+	Element operator+=(const Element &x){
 		return *this=*this+x;
 	}
-	Element operator-=(const Element x){
+	Element operator-=(const Element &x){
 		return *this=*this-x;
 	}
-	Element operator*=(const Element x){
+	Element operator*=(const Element &x){
 		return *this=*this*x;
 	}
-	Element operator/=(const Element x){
+	Element operator/=(const Element &x){
 		return *this=*this/x;
 	}
-	Element operator^=(const Element x){
+	Element operator^=(const Element &x){
 		return *this=*this^x;
 	}
-	Element operator%=(const Element x){
+	Element operator%=(const Element &x){
 		return *this=*this%x;
 	}
-	Element &operator=(const Element x){
+	Element &operator=(const Element &x){
 		a=x.a;
 		b=x.b;
 		c=x.c;
@@ -119,7 +119,7 @@ a.Int();
 		fl=x.fl;
 		return *this;
 	}
-	bool operator==(const Element x)const{
+	bool operator==(const Element &x)const{
 		Element a=*this,b=x;
 		if(a.fl>b.fl)swap(a,b);
 		if(b.fl==4){
@@ -142,16 +142,16 @@ a.Int();
 		}
 		if(b.fl==0)return 1;
 	}
-	bool operator<=(const Element x)const{
+	bool operator<=(const Element &x)const{
 		return *this<x||*this==x;
 	}
-	bool operator>=(const Element x)const{
+	bool operator>=(const Element &x)const{
 		return *this>x||*this==x;
 	}
-	bool operator!=(const Element x)const{
+	bool operator!=(const Element &x)const{
 		return !(*this==x);
 	}
-	bool operator<(const Element x)const{
+	bool operator<(const Element &x)const{
 		Element a=*this,b=x;
 		if(a.fl>b.fl)swap(a,b);
 		if(b.fl==4){
@@ -173,7 +173,7 @@ a.Int();
 			else return 0;
 		}
 	}
-	bool operator>(const Element x)const{
+	bool operator>(const Element &x)const{
 		  return !(*this==x||*this<x);
 	}
 	Element Str(){
